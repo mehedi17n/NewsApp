@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+    <string name="sign_up_text">Don’t have an account? <b><font color='#58C573'>Sign Up</font></b></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

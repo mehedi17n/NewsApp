@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!--    <color name="primaryColor" > #E6FD31 </color>-->
+    <!--    <color name="primaryColor2" >#A9EC00</color>-->
+    <!--    <color name="primaryColor" >#7BFF0E</color>-->
+    <color name="primaryColor" >#58C573</color>
+    <color name="bg"> #F3F6F8 </color>
+    <color name="darkGray" >#D2CECE</color>
+
+    //Gradient
+    <!--    <color name="startColor" >#F5FF24</color>-->
+    <!--    <color name="endColor" >#7BFF0E</color>-->
+
+    <color name="startColor" >#0097B2 </color>
+<!--    <color name="centerColor" >#D3F53E</color>-->
+    <color name="endColor" >#7ED957</color>
+</resources>
+
