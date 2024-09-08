@@ -16,6 +16,7 @@ datastorePreferences = "1.1.1"
 converterGson = "2.9.0"
 retrofit = "2.11.0"
 shimmer = "0.5.0"
+lifecycleViewmodelKtx = "2.8.5"
 
 [libraries]
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -32,6 +33,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

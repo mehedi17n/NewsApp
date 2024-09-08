@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.home
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.newsapp.R
 import com.example.newsapp.WebViewActivity
-import com.example.newsapp.model.Article
+import com.example.newsapp.data.Article
 
 class NewsAdapter(private var articleList: List<Article>) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {

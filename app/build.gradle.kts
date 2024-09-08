@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation (libs.lottie)
     implementation (libs.shimmer)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -8,13 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.newsapp.model.Article
-import com.example.newsapp.model.NewsResponse
-import com.example.newsapp.RetrofitInstance
+import com.example.newsapp.data.Article
+import com.example.newsapp.data.NewsResponse
+import com.example.newsapp.api.RetrofitInstance
+import com.example.newsapp.ui.home.MainViewModel
 import com.example.newsapp.ui.home.NewsAdapter
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +30,7 @@ class SearchFragment : Fragment() {
     private lateinit var searchBar: EditText
     private lateinit var newsAdapter: NewsAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var viewModel: MainViewModel
     private var articleList: List<Article> = emptyList() // Store all articles
 
     override fun onCreateView(
@@ -35,6 +41,7 @@ class SearchFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         // Initialize views
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView)
         searchBar = view.findViewById(R.id.searchBar)
         progressBar = view.findViewById(R.id.progressBar)
@@ -45,7 +52,7 @@ class SearchFragment : Fragment() {
         searchRecyclerView.adapter = newsAdapter
 
         // Fetch news articles
-        fetchNewsArticles()
+//        fetchNewsArticles()
 
         // Listen for text changes in the search bar
         searchBar.addTextChangedListener(object : TextWatcher {
@@ -58,37 +65,51 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        handleLoading()
+
+        lifecycleScope.launch {
+            viewModel.postResponse.collect { response ->
+                if (response != null) {
+                    val articles = response.articles?.filterNotNull() ?: emptyList()
+                    newsAdapter.updateArticles(articles)
+                } else {
+                    // Handle the case where the response is null (optional)
+                    Toast.makeText(requireContext(), "Failed to load news", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         return view
     }
 
-    private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideProgressBar() {
-        progressBar.visibility = View.GONE
-    }
-
-
-    private fun fetchNewsArticles() {
-        showProgressBar()
-        // Using Retrofit to fetch news articles
-        RetrofitInstance.api.getNewsArticle().enqueue(object : Callback<NewsResponse> {
-            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
-                hideProgressBar()
-                if (response.isSuccessful && response.body() != null) {
-                    articleList = response.body()?.articles?.filterNotNull() ?: emptyList()
-                    // Initially show all articles
-                    newsAdapter.updateArticles(articleList)
-                }
+    private fun handleLoading() {
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { isLoading ->
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             }
-
-            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                hideProgressBar()
-                // Handle error
-            }
-        })
+        }
     }
+
+
+//    private fun fetchNewsArticles() {
+//        showProgressBar()
+//        // Using Retrofit to fetch news articles
+//        RetrofitInstance.api.().enqueue(object : Callback<NewsResponse> {
+//            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+//                hideProgressBar()
+//                if (response.isSuccessful && response.body() != null) {
+//                    articleList = response.body()?.articles?.filterNotNull() ?: emptyList()
+//                    // Initially show all articles
+//                    newsAdapter.updateArticles(articleList)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+//                hideProgressBar()
+//                // Handle error
+//            }
+//        })
+//    }
 
     private fun filterArticlesBySource(query: String) {
         // Filter the articles based on the source name
