@@ -6,6 +6,7 @@ import android.util.Log.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var newsAdapter: NewsAdapter
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,8 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerView)
+        progressBar = view.findViewById(R.id.progressBar)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         newsAdapter = NewsAdapter(emptyList()) // Initially empty list
         recyclerView.adapter = newsAdapter
@@ -42,10 +46,21 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progressBar.visibility = View.GONE
+    }
+
+
     private fun fetchNewsArticles() {
+        showProgressBar()
         // Using Retrofit to fetch news articles
         RetrofitInstance.api.getNewsArticle().enqueue(object : Callback<NewsResponse> {
             override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+                hideProgressBar()
                 if (response.isSuccessful && response.body() != null) {
                     val articles = response.body()?.articles?.filterNotNull() ?: emptyList()
                     newsAdapter.updateArticles(articles) // Update adapter with fetched articles
@@ -55,6 +70,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                hideProgressBar()
                 Log.e("HomeFragment", "Error: ${t.message}")
                 Toast.makeText(requireContext(), "Error fetching news", Toast.LENGTH_SHORT).show()
             }

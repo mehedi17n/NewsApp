@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ class SearchFragment : Fragment() {
     private lateinit var searchRecyclerView: RecyclerView
     private lateinit var searchBar: EditText
     private lateinit var newsAdapter: NewsAdapter
+    private lateinit var progressBar: ProgressBar
     private var articleList: List<Article> = emptyList() // Store all articles
 
     override fun onCreateView(
@@ -35,6 +37,7 @@ class SearchFragment : Fragment() {
         // Initialize views
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView)
         searchBar = view.findViewById(R.id.searchBar)
+        progressBar = view.findViewById(R.id.progressBar)
 
         // Setup RecyclerView
         searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -58,10 +61,21 @@ class SearchFragment : Fragment() {
         return view
     }
 
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progressBar.visibility = View.GONE
+    }
+
+
     private fun fetchNewsArticles() {
+        showProgressBar()
         // Using Retrofit to fetch news articles
         RetrofitInstance.api.getNewsArticle().enqueue(object : Callback<NewsResponse> {
             override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+                hideProgressBar()
                 if (response.isSuccessful && response.body() != null) {
                     articleList = response.body()?.articles?.filterNotNull() ?: emptyList()
                     // Initially show all articles
@@ -70,6 +84,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                hideProgressBar()
                 // Handle error
             }
         })
