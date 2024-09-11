@@ -47,9 +47,6 @@ class MainViewModel : ViewModel() {
                     is Resource.Error -> {
                         _isLoading.value = false // Stop loading
                         _errorMessage.value = resource.message // Set error message
-
-
-
                     }
                 }
             }
@@ -61,7 +58,6 @@ class MainViewModel : ViewModel() {
         val filteredArticles = _postResponse.value?.articles?.filter {
             it?.source?.name?.contains(query, ignoreCase = true) == true
         }
-
         return filteredArticles
 
     }

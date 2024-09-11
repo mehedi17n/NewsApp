@@ -67,11 +67,9 @@ class NewsAdapter(private var articleList: List<Article?>) :
 
     // Update the article list dynamically
     fun updateArticles(newArticles: List<Article?>?) {
-
         if (newArticles != null) {
             articleList = newArticles
             notifyDataSetChanged()
         }
-
     }
 }

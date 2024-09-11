@@ -1,9 +1,7 @@
 package com.example.newsapp.repository
 
-import android.net.http.HttpException
 import android.util.Log
 import com.example.newsapp.api.Resource
-import com.example.newsapp.api.RetrofitInstance.api
 import com.example.newsapp.data.NewsResponse
 import com.example.newsapp.service.ServiceApi
 import kotlinx.coroutines.Dispatchers
@@ -12,19 +10,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.io.IOException
 
-//class PostRepository(private val api: ServiceApi) {
-//    suspend fun getNews(): Flow<Resource<NewsResponse>> = flow {
-//        Log.d("Repository", "getPosts")
-//        try {
-//            emit(Resource.Loading) // Emit loading state
-//            val response = api.getNewsArticle() // Make the network request
-//            emit(Resource.Success(response))
-//        } catch (e: Exception) {
-//            emit(Resource.Error(e.message ?: "Unknown Error")) // Emit error state
-//        }
-//    }.flowOn(Dispatchers.IO)
-//
-//}
 
 class PostRepository(private val api: ServiceApi) {
 

@@ -48,24 +48,18 @@ class SearchFragment : Fragment() {
 
         // Setup RecyclerView
         searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        newsAdapter = NewsAdapter(emptyList()) // Initially, no articles
+        newsAdapter = NewsAdapter(emptyList())
         searchRecyclerView.adapter = newsAdapter
 
-        // Fetch news articles
-//        fetchNewsArticles()
 
         // Listen for text changes in the search bar
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                filterArticlesBySource(s.toString()) // Filter articles as user types
-            val list = viewModel.onSearchText(s.toString())
-
+                val list = viewModel.onSearchText(s.toString())
                 newsAdapter.updateArticles(list)
-
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -89,35 +83,5 @@ class SearchFragment : Fragment() {
                 progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             }
         }
-    }
-
-
-//    private fun fetchNewsArticles() {
-//        showProgressBar()
-//        // Using Retrofit to fetch news articles
-//        RetrofitInstance.api.().enqueue(object : Callback<NewsResponse> {
-//            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
-//                hideProgressBar()
-//                if (response.isSuccessful && response.body() != null) {
-//                    articleList = response.body()?.articles?.filterNotNull() ?: emptyList()
-//                    // Initially show all articles
-//                    newsAdapter.updateArticles(articleList)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-//                hideProgressBar()
-//                // Handle error
-//            }
-//        })
-//    }
-
-    private fun filterArticlesBySource(query: String) {
-
-        // Filter the articles based on the source name
-        val filteredArticles = articleList.filter {
-            it.source?.name?.contains(query, ignoreCase = true) == true
-        }
-        newsAdapter.updateArticles(filteredArticles)
     }
 }
