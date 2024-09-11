@@ -23,16 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        lottieProgressBar = findViewById(R.id.lottieProgressBar)
-//
-//        lottieProgressBar.visibility = LottieAnimationView.VISIBLE
-
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            val intent = Intent(this, PostNewsActivity::class.java)
-//            startActivity(intent)
-////            lottieProgressBar.visibility = LottieAnimationView.GONE
-//        }, 1500)
-
         bottomNav = findViewById(R.id.bottomNav)
 
         // Load the default fragment (Home)

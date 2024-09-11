@@ -59,7 +59,11 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterArticlesBySource(s.toString()) // Filter articles as user types
+//                filterArticlesBySource(s.toString()) // Filter articles as user types
+            val list = viewModel.onSearchText(s.toString())
+
+                newsAdapter.updateArticles(list)
+
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -72,9 +76,6 @@ class SearchFragment : Fragment() {
                 if (response != null) {
                     val articles = response.articles?.filterNotNull() ?: emptyList()
                     newsAdapter.updateArticles(articles)
-                } else {
-                    // Handle the case where the response is null (optional)
-                    Toast.makeText(requireContext(), "Failed to load news", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -112,6 +113,7 @@ class SearchFragment : Fragment() {
 //    }
 
     private fun filterArticlesBySource(query: String) {
+
         // Filter the articles based on the source name
         val filteredArticles = articleList.filter {
             it.source?.name?.contains(query, ignoreCase = true) == true

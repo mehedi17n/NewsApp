@@ -1,9 +1,12 @@
 package com.example.newsapp.ui.home
 
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.api.Resource
 import com.example.newsapp.api.RetrofitInstance
+import com.example.newsapp.data.Article
 import com.example.newsapp.data.NewsResponse
 import com.example.newsapp.repository.PostRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,9 +47,22 @@ class MainViewModel : ViewModel() {
                     is Resource.Error -> {
                         _isLoading.value = false // Stop loading
                         _errorMessage.value = resource.message // Set error message
+
+
+
                     }
                 }
             }
         }
+    }
+
+    fun onSearchText(query: String): List<Article?>? {
+        // Filter the articles based on the source name
+        val filteredArticles = _postResponse.value?.articles?.filter {
+            it?.source?.name?.contains(query, ignoreCase = true) == true
+        }
+
+        return filteredArticles
+
     }
 }

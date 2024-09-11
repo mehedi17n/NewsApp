@@ -12,7 +12,7 @@ import com.example.newsapp.R
 import com.example.newsapp.WebViewActivity
 import com.example.newsapp.data.Article
 
-class NewsAdapter(private var articleList: List<Article>) :
+class NewsAdapter(private var articleList: List<Article?>) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     // ViewHolder to hold the views for each item
@@ -36,16 +36,16 @@ class NewsAdapter(private var articleList: List<Article>) :
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val article = articleList[position]
 
-        holder.articleTitle.text = article.title
-        holder.articleDescription.text = article.description
-        holder.articleAuthor.text = article.author ?: "Unknown"
-        holder.articlePublishedAt.text = article.publishedAt
-        holder.articleSource.text = article.source?.name ?: "Unknown Source"
+        holder.articleTitle.text = article?.title
+        holder.articleDescription.text = article?.description
+        holder.articleAuthor.text = article?.author ?: "Unknown"
+        holder.articlePublishedAt.text = article?.publishedAt
+        holder.articleSource.text = article?.source?.name ?: "Unknown Source"
 
         // Handle link click to open in WebViewActivity
         holder.articleSource.setOnClickListener {
             val context = holder.itemView.context
-            val url = article.url ?: return@setOnClickListener
+            val url = article?.url ?: return@setOnClickListener
             val intent = Intent(context, WebViewActivity::class.java).apply {
                 putExtra("url", url)
             }
@@ -53,7 +53,7 @@ class NewsAdapter(private var articleList: List<Article>) :
         }
 
         // Use Coil to load images
-        holder.articleImage.load(article.urlToImage) {
+        holder.articleImage.load(article?.urlToImage) {
             crossfade(true)
             placeholder(R.drawable.placeholder_image)
             error(R.drawable.error_image)
@@ -66,8 +66,12 @@ class NewsAdapter(private var articleList: List<Article>) :
     }
 
     // Update the article list dynamically
-    fun updateArticles(newArticles: List<Article>) {
-        articleList = newArticles
-        notifyDataSetChanged()
+    fun updateArticles(newArticles: List<Article?>?) {
+
+        if (newArticles != null) {
+            articleList = newArticles
+            notifyDataSetChanged()
+        }
+
     }
 }

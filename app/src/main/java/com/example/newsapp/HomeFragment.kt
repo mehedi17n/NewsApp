@@ -52,9 +52,6 @@ class HomeFragment : Fragment() {
                 if (response != null) {
                     val articles = response.articles?.filterNotNull() ?: emptyList()
                     newsAdapter.updateArticles(articles)
-                } else {
-                    // Handle the case where the response is null (optional)
-                    Toast.makeText(requireContext(), "Failed to load news", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -66,6 +63,15 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
                 progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
+        }
+    }
+
+    private fun handleError() {
+        lifecycleScope.launch {
+            viewModel.errorMessage.collect { msg ->
+                if(msg!= null)
+                 Toast.makeText(requireContext(), "Failed to load news", Toast.LENGTH_SHORT).show()
             }
         }
     }
